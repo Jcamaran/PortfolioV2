@@ -25,7 +25,7 @@ export default function Navbar() {
           </Link>
 
           {/* Navigation Links */}
-          <div className="hidden md:flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 p-1 rounded-full">
+          <div className="hidden md:flex items-center justify-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 p-1 rounded-full">
             {links.map((link) => (
               <Link
                 key={link.href}
@@ -36,12 +36,12 @@ export default function Navbar() {
                     : "text-slate-300 hover:text-slate-200 hover:bg-slate-700"
                 } text-sm transition-colors px-4 py-2 rounded-full relative`}
               >
-                <span className="relative z-10">{link.label}</span>
+                <span className="relative z-10 flex items-center justify-center h-full m-0">{link.label}</span>
                 {pathname === link.href && (
                   <motion.span
                     layoutId="bubble-tab"
                     transition={{ type: "spring", duration: 0.5 }}
-                    className="absolute inset-0 z-0 bg-linear-to-r from-violet-600 to-indigo-600 rounded-full"
+                    className="absolute inset-0 z-0 bg-linear-to-r from-violet-600 to-indigo-600 rounded-full flex items-center justify-center"
                   />
                 )}
               </Link>

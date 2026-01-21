@@ -2,7 +2,7 @@
 
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF, Center, Environment } from '@react-three/drei';
-import { useRef, useState, useEffect, Suspense } from 'react';
+import { useRef, useState, useEffect, Suspense, useMemo } from 'react';
 import * as THREE from 'three';
 
 interface Model3DProps {
@@ -14,11 +14,12 @@ interface Model3DProps {
 // Component that loads and renders the 3D model
 function Model3D({ modelPath, mouseRef, scale }: Model3DProps) {
   const meshRef = useRef<THREE.Group>(null);
-  const { scene } = useGLTF(modelPath);
+  const { scene } = useGLTF(modelPath, true); // Enable Draco compression
 
-  // Enable reflections on all meshes in the model
-  useEffect(() => {
-    scene.traverse((child) => {
+  // Clone scene once and cache it using useMemo to avoid re-cloning
+  const clonedScene = useMemo(() => {
+    const cloned = scene.clone();
+    cloned.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
         if (mesh.material) {
@@ -31,6 +32,7 @@ function Model3D({ modelPath, mouseRef, scale }: Model3DProps) {
         }
       }
     });
+    return cloned;
   }, [scene]);
 
   // Animate based on mouse position using unprojection
@@ -71,7 +73,7 @@ function Model3D({ modelPath, mouseRef, scale }: Model3DProps) {
     <Center>
       <primitive 
         ref={meshRef} 
-        object={scene.clone()} 
+        object={clonedScene} 
         scale={scale}
       />
     </Center>
@@ -147,7 +149,7 @@ export default function Logo3D({
   );
 }
 
-// Preload models for better performance
-useGLTF.preload('/models/asml_3d_logo_3-v2.glb');
-useGLTF.preload('/models/shu_4.glb');
-useGLTF.preload('/models/sikorsky.glb');
+// Preload models for better performance with Draco compression
+useGLTF.preload('/models/asml_3d_logo_3-v2.glb', true);
+useGLTF.preload('/models/shu_4.glb', true);
+useGLTF.preload('/models/sikorsky.glb', true);
