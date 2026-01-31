@@ -24,3 +24,106 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+/* Register a typed CSS variable for smoothly animating a gradient angle */
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* Keyframes to spin the gradient angle */
+@keyframes spin-border {
+  to { --border-angle: 360deg; }
+}
+
+/* Typed color custom properties for animating gradient stops */
+@property --g1 {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #16a34a; /* green-600 */
+}
+@property --g2 {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #a7f3d0; /* emerald-200 */
+}
+
+@layer components {
+  /* Gradient border wrapper: adds a conic-gradient ring via ::before */
+  .gradient-border,
+  .card-wrapper {
+    position: relative;
+    border-radius: 4rem; /* match rounded-3xl */
+    z-index: 0;
+    cursor: pointer;
+  }
+  .gradient-border::before,
+  .card-wrapper::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 0.1rem; /* border thickness */
+    border-radius: inherit;
+    background: conic-gradient(from var(--border-angle), #E2BBE9,  #725CAD, #F1E7E7, #77BEF0);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    transition: filter 300ms ease;
+  }
+  /* Ensure inner content stays above the border layer */
+  .gradient-border > *,
+  .card-wrapper > * { position: relative; z-index: 1; }
+
+  /* Add this class to spin the gradient border */
+  .gradient-border.animate-border-spin::before,
+  .card-wrapper.animate-border-spin::before {
+    animation: spin-border 6s linear infinite;
+  }
+
+  /* Outer glow layer that spills beyond the card on hover */
+  .gradient-border::after,
+  .card-wrapper::after {
+    content: "";
+    position: absolute;
+    inset: 3px; /* extend beyond edges to allow spill */
+    border-radius: inherit;
+    background: conic-gradient(from var(--border-angle), #E2BBE9, #F1E7E7, #725CAD, #77BEF0);
+    opacity: 0; /* hidden until hover */
+    filter: blur(106px);
+    pointer-events: none;
+    z-index: 0;
+    transition: opacity 300ms ease, filter 300ms ease, transform 300ms ease;
+  }
+
+  /* Keep the spin animation in sync for the glow layer */
+  .gradient-border.animate-border-spin::after,
+  .card-wrapper.animate-border-spin::after {
+    animation: spin-border 6s linear infinite;
+  }
+
+  /* Hover: brighten ring and make glow spill out */
+  .gradient-border:hover::before,
+  .card-wrapper:hover::before {
+    filter: saturate(1.3) brightness(1.2);
+  }
+  .gradient-border:hover::after,
+  .card-wrapper:hover::after {
+    opacity: 0.8;
+    filter: blur(28px) saturate(1.3) brightness(1.15);
+    transform: scale(1.06);
+  }
+
+  .card_content {
+    transition: all ease-in-out duration-300;
+  }
+}
+
+@layer utilities {
+  .card-wrapper {
+    @apply relative bg-linear-to-br from-fuchsia-500/20 via-purple-500/20 to-cyan-500/30;
+
+  }
+}

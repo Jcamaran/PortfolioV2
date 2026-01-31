@@ -71,7 +71,7 @@ export default function SpotifyCarousel() {
   };
 
   return (
-    <div className="relative w-full h-full overflow-hidden rounded-3xl bg-linear-to-br from-green-600 to-emerald-600 p-3 flex flex-col">
+    <div className="relative w-full h-full  rounded-3xl  p-3 flex flex-col cursor-pointer">
       {/* Header */}
       {/* <div className="flex items-center gap-2 mb-4 z-10">
         <div>
@@ -79,7 +79,7 @@ export default function SpotifyCarousel() {
           <p className="text-white/70 text-xs">My Top Artists</p>
         </div>
       </div> */}
-       <p className="text-white/80 text-sm p-0 pb-1 flex flex-row items-center gap-1 justify-center">Current Favorite Artists </p> 
+       <p className="text-white/80 text-xs sm:text-xs p-0 pb-1 flex flex-row items-center gap-1 justify-center">Current Favorite Artists </p> 
 
 
       {/* Carousel */}
@@ -116,18 +116,18 @@ export default function SpotifyCarousel() {
             <div className="relative h-full  flex items-center justify-center flex-col">
               {/* Album/Artist Image */}
              
-              <div className="relative aspect-video w-full rounded-2xl overflow-hidden shadow-2xl">
+              <div className="relative aspect-video h-[125px]  w-52  sm:w-52 md:w-36 lg:w-52  overflow-hidden rounded-2xl  shadow-2xl bg-transparent">
                 <img
                   src={artists[currentIndex].image}
                   alt={artists[currentIndex].name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover rounded-2xl  "
                   draggable={false}
                 />
                 {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/90 via-transparent to-transparent" />
                 
                 {/* Artist Info */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 px-6">
+                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-2 lg:p-4 px-6">
                   <p className="text-white font-bold text-lg truncate ">
                     {artists[currentIndex].name}
                   </p>
@@ -159,7 +159,7 @@ export default function SpotifyCarousel() {
         </div>
 
         {/* Arrow Navigation (optional) */}
-        <button
+        {/* <button
           onClick={() => paginate(-1)}
           className="absolute left-2 z-10 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/50 transition-colors cursor-pointer"
         >
@@ -170,7 +170,7 @@ export default function SpotifyCarousel() {
           className="absolute right-2 z-10 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/50 transition-colors cursor-pointer"
         >
           ›
-        </button>
+        </button> */}
       </div>
 
       {/* Play Animation */}

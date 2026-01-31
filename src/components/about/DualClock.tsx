@@ -40,16 +40,16 @@ export default function DualClock() {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 0.3 }}
-      className="bg-black/50 rounded-3xl p-6 shadow-xl flex flex-col justify-center items-start h-full hover:border-purple-300 border-transparent border hover:border transition-all duration-300"
+      className="bg-black/50 rounded-3xl p-4 lg:p-6 shadow-xl flex flex-col justify-center items-start h-full hover:border-purple-300 border-transparent border hover:border transition-all duration-300 "
     >
-      <div className="space-y-3 w-full">
-        <div className="border-b border-white/20 pb-3">
+      <div className="space-y-2 lg:space-y-3 w-full">
+        <div className="border-b border-white/20 pb-2 lg:pb-3">
           <p className="text-white/80 text-xs mb-1">My Time (CT)</p>
-          <p className="text-white font-bold text-2xl">{mounted ? myTimeString : '--:--:-- --'}</p>
+          <p className="text-white font-bold text-xl lg:text-2xl">{mounted ? myTimeString : '--:--:-- --'}</p>
         </div>
         <div>
           <p className="text-white/80 text-xs mb-1">Your Time</p>
-          <p className="text-white font-bold text-2xl">{mounted ? visitorTimeString : '--:--:-- --'}</p>
+          <p className="text-white font-bold text-xl lg:text-2xl">{mounted ? visitorTimeString : '--:--:-- --'}</p>
           <p className="text-white/60 text-[10px] mt-1 truncate">{mounted ? visitorTimezone : 'Loading...'}</p>
         </div>
       </div>

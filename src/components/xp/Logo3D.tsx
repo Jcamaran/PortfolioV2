@@ -93,8 +93,8 @@ interface Logo3DProps {
 
 export default function Logo3D({ 
   modelPath, 
-  width = 150, 
-  height = 100,
+  width = 200, 
+  height = 90,
   modelScale = 1.5,
   dpr = [1, 2],
   hdrPath = "/liquid_bg_asml.hdr",

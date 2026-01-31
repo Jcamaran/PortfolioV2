@@ -9,13 +9,14 @@ export default function ProfileCard() {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 0.1 }}
-      className="md:col-span-1 md:row-span-2 rounded-3xl overflow-hidden shadow-xl relative group border hover:border-purple-400 transition-all duration-300"
+      className="md:col-span-1 md:row-span-2 rounded-3xl overflow-hidden shadow-xl relative group border hover:border-purple-400 transition-all duration-300 h-full  "
     >
       <div className="relative w-full h-full">
         <Image
           src="/profile_pic_2.png"
           alt="Joaquin Camaran"
           fill
+          // sizes="(max-width: 768px) 100vw, 400px"
           className="object-cover"
           priority
         />

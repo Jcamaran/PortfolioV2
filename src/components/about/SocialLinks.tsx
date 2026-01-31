@@ -9,17 +9,17 @@ const socialLinks = [
     label: "GitHub",
   },
   {
-    href: "https://www.linkedin.com/in/joaquincamarena/",
+    href: "https://www.linkedin.com/in/joaquin-camaran-69b858247/",
     icon: FaLinkedin,
     label: "LinkedIn",
   },
   {
-    href: "#",
+    href: "https://docs.google.com/document/d/18pJQy08zV3p4HsDuQ2STgj7poggK2EslhOywKcG3hY4/edit?usp=sharing",
     icon: HiDocumentText,
     label: "Resume",
   },
   {
-    href: "#",
+    href: "mailto:joaquin.camaran@example.com",
     icon: MdEmail,
     label: "Email",
   },

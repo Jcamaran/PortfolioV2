@@ -9,14 +9,14 @@ export default function InternshipCard() {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 0.6 }}
-      className="bg-blue-300/30 backdrop-blur-sm border border-white/10 rounded-3xl p-6 shadow-xl flex flex-col justify-between hover:border-purple-300 transition-all duration-300"
+      className="h-full bg-white backdrop-blur-lg border-none rounded-3xl p-4 lg:p-4 shadow-xl flex flex-col justify-between transition-all duration-300 card-wrapper animate-border-spin cursor-pointer group"
     >
-      <div>
-        <p className="text-white/80 text-sm">Recent Summer Internship</p>
-        <p className="text-white font-bold text-md">Data Analytics Engineer Intern</p>
+      <div className ="card-content " >
+        <p className="text-black/80 text-xs lg:text-sm  whitespace-nowrap  ">Recent Summer Internship</p>
+        <p className="text-blue-700 font-bold text-sm lg:text-md group-hover:ml-2  transition-all ease-in-out duration-300 whitespace-nowrap ">Data Analytics Engineer Intern</p>
       </div>
-      <div className="h-32 w-full flex items-center justify-center ">
-        <img src="/ASML-Symbol.png" alt="ASML Logo" className="h-28 w-56 object-cover-contain rounded-xl" />
+      <div className="h-24 lg:h-32 w-full flex items-center justify-center ">
+        <img src="/ASML_Holding_transparent.svg" alt="ASML Logo" className="h-28 w-52 object-cover-contain rounded-xl" />
       </div>
     </motion.div>
   );
