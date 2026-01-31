@@ -4,8 +4,6 @@ import { motion } from "framer-motion";
 import SocialLinks from "./SocialLinks";
 
 export default function BioCard() {
-  const isMedium = window.innerWidth < 200;
-
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
