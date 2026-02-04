@@ -9,10 +9,17 @@ interface Model3DProps {
   modelPath: string;
   mouseRef: React.MutableRefObject<{ x: number; y: number }>;
   scale: number;
+  useHDR: boolean;
+  baseColor?: string;
+  perMeshColors?: Record<string, string>;
+  addCenterLight?: boolean;
+  centerLightIntensity?: number;
+  centerLightColor?: string | number;
+  centerLightOffset?: [number, number, number];
 }
 
 // Component that loads and renders the 3D model
-function Model3D({ modelPath, mouseRef, scale }: Model3DProps) {
+function Model3D({ modelPath, mouseRef, scale, useHDR, baseColor, perMeshColors, addCenterLight, centerLightIntensity = 1.6, centerLightColor = 0xffffff, centerLightOffset = [0, 0, 8] }: Model3DProps) {
   const meshRef = useRef<THREE.Group>(null);
   const { scene } = useGLTF(modelPath, true); // Enable Draco compression
 
@@ -24,23 +31,34 @@ function Model3D({ modelPath, mouseRef, scale }: Model3DProps) {
         const mesh = child as THREE.Mesh;
         if (mesh.material) {
           const material = mesh.material as THREE.MeshStandardMaterial;
-          // Enable environment mapping for reflections
-          material.envMapIntensity = 1.5;
-          material.metalness = 0.8;
-          material.roughness = 0.2;
+          // Tune material for HDR vs direct lights
+          if (useHDR) {
+            material.envMapIntensity = 1.5;
+            material.metalness = 0.9;
+            material.roughness = 0.2;
+          } else {
+            // Make materials read as more metallic under direct lights
+            material.envMapIntensity = 0;
+            material.metalness = 0.9;
+            material.roughness = 0.25;
+          }
+
+          // Optional color overrides
+          const name = mesh.name || '';
+          const overrideColor = perMeshColors?.[name] || baseColor;
+          if (overrideColor && (material as any).color) {
+            material.color = new THREE.Color(overrideColor);
+          }
           material.needsUpdate = true;
         }
       }
     });
     return cloned;
-  }, [scene]);
+  }, [scene, useHDR, baseColor, perMeshColors]);
 
   // Animate based on mouse position using unprojection
   useFrame(({ camera, clock }) => {
     if (meshRef.current) {
-      // Source - https://stackoverflow.com/a
-      // Posted by uhura, modified by community. See post 'Timeline' for change history
-      // Retrieved 2026-01-10, License - CC BY-SA 3.0
       const { x, y } = mouseRef.current;
       const vector = new THREE.Vector3(x, y, 0.5);
       vector.unproject(camera);
@@ -71,6 +89,10 @@ function Model3D({ modelPath, mouseRef, scale }: Model3DProps) {
 
   return (
     <Center>
+      {/* Centered light to highlight the metallic logo from its origin */}
+      {!useHDR && addCenterLight && (
+        <pointLight position={centerLightOffset} intensity={centerLightIntensity} color={centerLightColor as any} />
+      )}
       <primitive 
         ref={meshRef} 
         object={clonedScene} 
@@ -89,17 +111,33 @@ interface Logo3DProps {
   hdrPath?: string; // Path to HDR environment file
   isHovered?: boolean;  // Whether the parent card is being hovered
   mouseRef?: React.MutableRefObject<{ x: number; y: number }>; // Mouse coords from parent card
+  useHDR?: boolean; // Enable/disable HDR environment
+  baseColor?: string; // Simple color applied to all meshes if provided
+  perMeshColors?: Record<string, string>; // Optional per-mesh color overrides by mesh name
+  skyColor?: string; // Optional sky color for the environment
+  centerLight?: boolean; // Place a point light at model center when not using HDR
+  centerLightIntensity?: number;
+  centerLightColor?: string | number;
+  centerLightOffset?: [number, number, number];
 }
 
 export default function Logo3D({ 
   modelPath, 
-  width = 200, 
+  width = 300, 
   height = 90,
   modelScale = 1.5,
   dpr = [1, 2],
   hdrPath = "/liquid_bg_asml.hdr",
   isHovered = false,
-  mouseRef: providedMouseRef
+  mouseRef: providedMouseRef,
+  useHDR = false,
+  baseColor,
+  perMeshColors,
+  skyColor,
+  centerLight = true,
+  centerLightIntensity = 1.6,
+  centerLightColor = 0xffffff,
+  centerLightOffset = [0, 0, 2]
 }: Logo3DProps) {
   const internalMouseRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const mouseRef = providedMouseRef ?? internalMouseRef;
@@ -125,24 +163,51 @@ export default function Logo3D({
       <Canvas
         gl={{ antialias: true, alpha: true }}
         dpr={dpr}
+        
         camera={{ position: [0, 0, 8], fov: 50 }}
         className="flex items-center justify-center w-full h-full"
       >
         <Suspense fallback={null}>
           {/* Environment preset or custom HDR for realistic lighting and reflections */}
-          <Environment 
-            preset={hdrPath.startsWith('/') ? undefined : hdrPath as any}
-            files={hdrPath.startsWith('/') ? hdrPath : undefined}
-            background={false} 
-          />
+          {useHDR && (
+            <Environment 
+              preset={hdrPath.startsWith('/') ? undefined : hdrPath as any}
+              files={hdrPath.startsWith('/') ? hdrPath : undefined}
+              background={false} 
+            />
+          )}
           
           {/* Bright lighting */}
-          <ambientLight intensity={0.3} />
-          <spotLight position={[0, 10, 10]} angle={0.7} penumbra={0.5} intensity={50} castShadow />
-          <pointLight position={[0, 10, 10]} intensity={12} color="#ffffff" />
-          <pointLight position={[-10, -10, -10]} intensity={8} />
+          {useHDR ? (
+            <>
+              <ambientLight intensity={0.7} />
+              <spotLight position={[20,0 , 8]} angle={0} penumbra={0.5} intensity={20} castShadow />
+              <pointLight position={[0, 10, 10]} intensity={12} color="#ffffff" />
+              <pointLight position={[-10, -10, -10]} intensity={8} />
+            </>
+          ) : (
+            <>
+              <hemisphereLight color={skyColor ?? 0xb1e1ff} groundColor={0x444444} intensity={0.8} />
+              <ambientLight intensity={0.7} />
+              <directionalLight position={[10, 2, 20]} intensity={0.25} castShadow />
+              <directionalLight position={[-10, 2, 20]} intensity={0.2} />
+              <pointLight position={[0, 5, 8]} intensity={2} />
+              <directionalLight position={[2, -4, 20]} intensity={0.3} />
+            </>
+          )}
           
-          <Model3D modelPath={modelPath} mouseRef={mouseRef} scale={modelScale} />
+          <Model3D 
+            modelPath={modelPath} 
+            mouseRef={mouseRef} 
+            scale={modelScale} 
+            useHDR={useHDR}
+            baseColor={baseColor}
+            perMeshColors={perMeshColors}
+            addCenterLight={!useHDR && centerLight}
+            centerLightIntensity={centerLightIntensity}
+            centerLightColor={centerLightColor}
+            centerLightOffset={centerLightOffset}
+          />
         </Suspense>
       </Canvas>
     </div>

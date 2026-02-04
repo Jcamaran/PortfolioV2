@@ -20,7 +20,7 @@ export default function BioCard() {
             data whether it's building websites, conducting data-driven research and analysis, or exploring the latest
             advancements in AI and implementing them into projects.
           </p>
-          <p className={`text-gray-300 text-xs  md:text-xs lg:text-sm leading-relaxed `}>
+          <p className={`text-gray-300 text-xs  md:text-xs lg:text-sm lgiteading-relaxed `}>
             When I'm not coding, you'll find me playing sports, reading sci-fi novels, riding my motorcycle, or all of
             which done while listening to some good music.
           </p>

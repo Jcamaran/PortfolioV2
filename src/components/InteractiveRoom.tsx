@@ -153,7 +153,7 @@ function InfoModal({ zone, onClose }: { zone: any; onClose: () => void }) {
           <div className="mt-6 pt-6 border-t border-white/10">
             <button
               onClick={onClose}
-              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"
+              className="px-6 py-3 bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"
             >
               Continue Exploring
             </button>
@@ -197,7 +197,7 @@ export default function InteractiveRoom() {
   const selectedZoneData = zones.find(z => z.id === selectedZone);
 
   return (
-    <div className="relative w-full h-[1000px] rounded-2xl overflow-hidden border border-white/20 bg-slate-900">
+    <div className="relative w-full h-250 rounded-2xl overflow-hidden border border-white/20 bg-slate-900">
       {/* Instructions overlay */}
       <div className="absolute top-4 left-4 z-10 bg-black/70 backdrop-blur-sm border border-white/20 rounded-lg p-4 max-w-xs">
         <p className="text-white text-sm font-medium mb-2">🎮 Interactive Room</p>

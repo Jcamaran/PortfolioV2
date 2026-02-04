@@ -46,7 +46,7 @@ function AnimatedLine() {
   const getLogoDimensions = () => {
     if (viewportWidth < 640) return { width: 180, height: 70, scale: 0.7 }; // mobile
     if (viewportWidth < 768) return { width: 240, height: 85, scale: 0.85 }; // sm
-    return { width: 200, height: 90, scale: 1 }; // md and up
+    return { width: 300, height: 90, scale: 1 }; // md and up
   };
   const logoDimensions = getLogoDimensions();
   
@@ -73,10 +73,11 @@ function AnimatedLine() {
       description: "Building a retrieval-augmented generation (RAG) LLM web application that enables Sikorsky engineers to diagnose and resolve discrepancies more efficiently.",
       position: "20%", // Position along horizontal line
       verticalPosition: "8%", // Position for vertical layout
-      hdrPath: "/liquid_bg_asml.hdr",
       modelPath: "/models/sikorsky.glb",
       modelScale: 1,
-      modelOffset: { x: 0, y: -0 } // Offset to center Sikorsky model
+      modelOffset: { x: 0, y: -0 }, // Offset to center Sikorsky model
+      baseColor: "#3b82f6", // metallic blue
+      skyColor: "#bcdcff"
     },
     {
       title: "Data Analytics Engineer Intern",
@@ -87,7 +88,8 @@ function AnimatedLine() {
       verticalPosition: "35%",
       modelPath: "/models/asml_3d_logo_3-v2.glb",
       modelScale: 1.6,
-      hdrPath: "/liquid_bg_asml.hdr"
+      baseColor: "#3b82f6", // metallic blue
+      skyColor: "#bcdcff"
     },
     {
       title: "Data Analyst Intern",
@@ -97,8 +99,9 @@ function AnimatedLine() {
       verticalPosition: "60%",
       modelPath: "/models/shu_4.glb",
       modelScale: 2,
-      hdrPath: "/red_swirls.hdr",
-      modelOffset: { x: 0, y: -10 }
+      modelOffset: { x: 0, y: -10 },
+      baseColor: "#d32f2f", // metallic red
+      skyColor: "#ffd1d1"
     },
     {
       title: "Software Engineer Intern",
@@ -108,8 +111,9 @@ function AnimatedLine() {
       verticalPosition: "85%",
       modelPath: "/models/sikorsky.glb",
       modelScale: 1,
-      hdrPath: "/liquid_bg_asml.hdr",
-      modelOffset: { x: 0, y: -10 } 
+      modelOffset: { x: 0, y: -10 }, 
+      baseColor: "#3b82f6", // metallic blue
+      skyColor: "#bcdcff"
     }
   ];
 
@@ -237,7 +241,7 @@ function AnimatedLine() {
                         className="absolute inset-0 "
                         style={{
                           background: `radial-gradient(circle at center, 
-                            rgba(205, 209, 228) 20%, 
+                            rgba(205, 209, 228) 15%, 
                             rgba(139, 92, 246, 0.4) 15%, 
                             transparent 40%)`,
                           filter: 'blur(15px)',
@@ -253,7 +257,7 @@ function AnimatedLine() {
                         style={{
                           background: `radial-gradient(ellipse at center, 
                             rgba(45, 85, 255, 0.3) 0%, 
-                            rgba(43, 44, 170, 0.1) 30%, 
+                            rgba(43, 44, 170, 0.1) 40%, 
                             transparent 90%)`,
                           filter: 'blur(0px)',
                           mixBlendMode: 'screen',
@@ -282,7 +286,9 @@ function AnimatedLine() {
                         height={logoDimensions.height} 
                         modelScale={exp.modelScale * logoDimensions.scale}
                         isHovered={hoveredCardIndex === index}
-                        hdrPath={exp.hdrPath}
+                        useHDR={false}
+                        baseColor={(exp as any).baseColor}
+                        skyColor={(exp as any).skyColor}
                         dpr={viewportWidth < 640 ? [1, 1.5] : [1, 2]}
                         mouseRef={mouseRefs[index] as any}
                         
