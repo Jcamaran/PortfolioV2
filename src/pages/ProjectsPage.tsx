@@ -46,7 +46,7 @@ export default function ProjectsPage() {
   ];
 
   return (
-    <div className="h-full font-sans flex flex-col items-center justify-center px-4 sm:px-6">
+    <div className="h-full font-sans flex flex-col items-center justify-center px-4 sm:px-6 pt-16 sm:pt-0">
       <MemoizedParticles />
 
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-4 md:py-10">
