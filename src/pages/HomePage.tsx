@@ -19,7 +19,7 @@ export default function HomePage() {
           role="Developer & Student"
           university="Sacred Heart University"
           speed={5}
-          font ="3D"/>
+          font="3d"/>
 
       </main>
       <div className="absolute bottom-8 right-8 z-10  shadow-lg shadow-blue-500/20 hover:scale-110 transition-transform">

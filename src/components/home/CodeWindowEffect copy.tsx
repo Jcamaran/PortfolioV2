@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import figlet from 'figlet';
+import { loadFontData } from '@/utils/fontLoader';
 
 interface CodeWindowEffectProps {
   name: string;
@@ -54,7 +55,10 @@ export default function CodeWindowEffect(props: CodeWindowEffectProps) {
   // Check if terminal has been loaded before
   useEffect(() => {  
     const hasLoaded = sessionStorage.getItem('terminalLoaded');
-    if (hasLoaded === 'true') {
+    const cachedFont = sessionStorage.getItem('terminalFont');
+    
+    // Only use cached version if the font matches
+    if (hasLoaded === 'true' && cachedFont === fontName) {
       // Skip all animations and show final state
       const loadedAscii = sessionStorage.getItem('terminalAscii');
       if (loadedAscii) {
@@ -70,25 +74,27 @@ export default function CodeWindowEffect(props: CodeWindowEffectProps) {
       setShowInstructions(true);
       setShowInputPrompt(true);
     }
-  }, [command, fullText]);
+  }, [command, fullText, fontName]);
 
   // Helper function to load and set ASCII texts
   const finishLoading = useCallback((texts: string[]) => {
     setAsciiTexts(texts);
     setIsLoading(false);
     setShowCommand(true);
-    // Store ASCII art for future use
+    // Store ASCII art and font for future use
     if (texts[0]) {
       sessionStorage.setItem('terminalAscii', texts[0]);
+      sessionStorage.setItem('terminalFont', fontName);
     }
-  }, []);
+  }, [fontName]);
 
   useEffect(() => {
     // Only run on client-side to avoid SSR fetch issues on Vercel
     if (typeof window === 'undefined') return;
     
-    // Skip if already loaded from sessionStorage
-    if (sessionStorage.getItem('terminalLoaded') === 'true') {
+    // Skip if already loaded from sessionStorage with the same font
+    const cachedFont = sessionStorage.getItem('terminalFont');
+    if (sessionStorage.getItem('terminalLoaded') === 'true' && cachedFont === fontName) {
       return;
     }
     
@@ -108,31 +114,8 @@ export default function CodeWindowEffect(props: CodeWindowEffectProps) {
       return;
     }
     
-    // Try loading from local public folder first, then fallback to CDN
-    const localFontUrl = `/fonts/${fontName}.flf`;
-    console.log('Fetching font from:', localFontUrl);
-    
-    fetch(localFontUrl)
-      .then(res => {
-        console.log('Local font fetch response:', res.status);
-        if (!res.ok) {
-          // Fallback to CDN
-          console.log('❌ Local font failed, trying CDN...');
-          return fetch(`https://unpkg.com/figlet@1.7.0/fonts/${fontName}.flf`);
-        }
-        console.log('✅ Font loaded from LOCAL /fonts/ directory');
-        return res;
-      })
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status}`);
-        }
-        // Check if this is from CDN (has unpkg in URL)
-        if (res.url.includes('unpkg.com')) {
-          console.log('✅ Font loaded from CDN (internet)');
-        }
-        return res.text();
-      })
+    // Load font using the utility (works reliably on Vercel)
+    loadFontData(fontName)
       .then(fontData => {
         figlet.parseFont(fontName, fontData);
         const texts: string[] = [];
