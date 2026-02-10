@@ -56,6 +56,23 @@ function Model3D({ modelPath, mouseRef, scale, useHDR, baseColor, perMeshColors,
     return cloned;
   }, [scene, useHDR, baseColor, perMeshColors]);
 
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      clonedScene?.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) {
+          const mesh = child as THREE.Mesh;
+          mesh.geometry?.dispose();
+          if (Array.isArray(mesh.material)) {
+            mesh.material.forEach(material => material.dispose());
+          } else {
+            mesh.material?.dispose();
+          }
+        }
+      });
+    };
+  }, [clonedScene]);
+
   // Animate based on mouse position using unprojection
   useFrame(({ camera, clock }) => {
     if (meshRef.current) {
@@ -161,11 +178,27 @@ export default function Logo3D({
       className="relative mt-2"
     >
       <Canvas
-        gl={{ antialias: true, alpha: true }}
+        gl={{ 
+          antialias: true, 
+          alpha: true,
+          preserveDrawingBuffer: false,
+          powerPreference: 'high-performance'
+        }}
         dpr={dpr}
-        
         camera={{ position: [0, 0, 8], fov: 50 }}
         className="flex items-center justify-center w-full h-full"
+        onCreated={({ gl }) => {
+          // Handle WebGL context loss
+          const canvas = gl.domElement;
+          canvas.addEventListener('webglcontextlost', (event) => {
+            event.preventDefault();
+            console.warn('WebGL context lost in Logo3D');
+          });
+          
+          canvas.addEventListener('webglcontextrestored', () => {
+            console.log('WebGL context restored in Logo3D');
+          });
+        }}
       >
         <Suspense fallback={null}>
           {/* Environment preset or custom HDR for realistic lighting and reflections */}

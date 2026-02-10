@@ -37,7 +37,7 @@ export default function ProjectCard({
       className="group bg-white/5 backdrop-blur-sm border border-white/20 rounded-2xl overflow-hidden hover:border-purple-400 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20 flex flex-col h-full"
     >
       {/* Project Image/Placeholder */}
-      <div className="relative w-full h-28 sm:h-32 md:h-36 bg-gradient-to-br from-purple-500/20 via-blue-500/20 to-pink-500/20 overflow-hidden shrink-0">
+      <div className="relative w-full h-28 sm:h-32 md:h-36 bg-linear-to-br from-purple-500/20 via-blue-500/20 to-pink-500/20 overflow-hidden shrink-0">
         {image ? (
           <>
             <Image
@@ -48,7 +48,7 @@ export default function ProjectCard({
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
             {/* Gradient overlay on hover */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </>
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
@@ -73,14 +73,14 @@ export default function ProjectCard({
         </div>
 
         {/* Description - Fixed height with line clamp */}
-        <div className="mb-3 sm:mb-4 min-h-[2.5rem] sm:min-h-[3rem] md:min-h-[3rem]">
+        <div className="mb-3 sm:mb-4 min-h-10 sm:min-h-12 md:min-h-12">
           <p className="text-gray-300 leading-relaxed text-[11px] sm:text-sm line-clamp-3 sm:line-clamp-4">
             {description}
           </p>
         </div>
 
         {/* Tech Stack - Fixed height */}
-        <div className="mb-2 min-h-[2rem] sm:h-[6rem] flex mt-auto items-end overflow-hidden">
+        <div className="mb-2 min-h-8 sm:h-24 flex mt-auto items-end overflow-hidden">
           <div className="flex flex-wrap gap-1.5 sm:gap-2">
             {tech.map((techItem) => (
               <span
