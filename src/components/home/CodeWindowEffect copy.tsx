@@ -83,7 +83,10 @@ export default function CodeWindowEffect(props: CodeWindowEffectProps) {
     }
   }, []);
 
-  useEffect(() => { 
+  useEffect(() => {
+    // Only run on client-side to avoid SSR fetch issues on Vercel
+    if (typeof window === 'undefined') return;
+    
     // Skip if already loaded from sessionStorage
     if (sessionStorage.getItem('terminalLoaded') === 'true') {
       return;
@@ -114,14 +117,19 @@ export default function CodeWindowEffect(props: CodeWindowEffectProps) {
         console.log('Local font fetch response:', res.status);
         if (!res.ok) {
           // Fallback to CDN
-          console.log('Trying CDN...');
+          console.log('❌ Local font failed, trying CDN...');
           return fetch(`https://unpkg.com/figlet@1.7.0/fonts/${fontName}.flf`);
         }
+        console.log('✅ Font loaded from LOCAL /fonts/ directory');
         return res;
       })
       .then(res => {
         if (!res.ok) {
           throw new Error(`HTTP ${res.status}`);
+        }
+        // Check if this is from CDN (has unpkg in URL)
+        if (res.url.includes('unpkg.com')) {
+          console.log('✅ Font loaded from CDN (internet)');
         }
         return res.text();
       })
