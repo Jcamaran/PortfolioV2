@@ -2,7 +2,7 @@
 
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF, Center, Environment } from '@react-three/drei';
-import { useRef, useState, useEffect, Suspense, useMemo } from 'react';
+import { useRef, useEffect, Suspense, useMemo } from 'react';
 import * as THREE from 'three';
 
 interface Model3DProps {
@@ -46,7 +46,7 @@ function Model3D({ modelPath, mouseRef, scale, useHDR, baseColor, perMeshColors,
           // Optional color overrides
           const name = mesh.name || '';
           const overrideColor = perMeshColors?.[name] || baseColor;
-          if (overrideColor && (material as any).color) {
+          if (overrideColor){
             material.color = new THREE.Color(overrideColor);
           }
           material.needsUpdate = true;
@@ -91,7 +91,7 @@ function Model3D({ modelPath, mouseRef, scale, useHDR, baseColor, perMeshColors,
     <Center>
       {/* Centered light to highlight the metallic logo from its origin */}
       {!useHDR && addCenterLight && (
-        <pointLight position={centerLightOffset} intensity={centerLightIntensity} color={centerLightColor as any} />
+        <pointLight position={centerLightOffset} intensity={centerLightIntensity} color={centerLightColor} />
       )}
       <primitive 
         ref={meshRef} 
@@ -110,7 +110,7 @@ interface Logo3DProps {
   dpr?: [number, number]; // Device pixel ratio [min, max] for resolution quality
   hdrPath?: string; // Path to HDR environment file
   isHovered?: boolean;  // Whether the parent card is being hovered
-  mouseRef?: React.MutableRefObject<{ x: number; y: number }>; // Mouse coords from parent card
+  mouseRef?: React.RefObject<{ x: number; y: number }>; // Mouse coords from parent card
   useHDR?: boolean; // Enable/disable HDR environment
   baseColor?: string; // Simple color applied to all meshes if provided
   perMeshColors?: Record<string, string>; // Optional per-mesh color overrides by mesh name
@@ -143,7 +143,6 @@ export default function Logo3D({
   const mouseRef = providedMouseRef ?? internalMouseRef;
   const containerRef = useRef<HTMLDivElement>(null);
   const isHoveredRef = useRef(isHovered);
-  const rafRef = useRef<number | undefined>(undefined);
 
   // Update ref when hover state changes
   useEffect(() => {
@@ -151,6 +150,7 @@ export default function Logo3D({
     if (!isHovered) {
       mouseRef.current = { x: 0, y: 0 };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isHovered]);
 
 
@@ -171,7 +171,7 @@ export default function Logo3D({
           {/* Environment preset or custom HDR for realistic lighting and reflections */}
           {useHDR && (
             <Environment 
-              preset={hdrPath.startsWith('/') ? undefined : hdrPath as any}
+              preset={hdrPath.startsWith('/') ? undefined : (hdrPath as 'sunset' | 'dawn' | 'night' | 'warehouse' | 'forest' | 'apartment' | 'studio' | 'city' | 'park' | 'lobby')}
               files={hdrPath.startsWith('/') ? hdrPath : undefined}
               background={false} 
             />

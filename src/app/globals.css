@@ -36,18 +36,15 @@ body {
 /* Keyframes to spin the gradient angle */
 @keyframes spin-border {
   to { --border-angle: 360deg; }
+  
 }
 
-/* Typed color custom properties for animating gradient stops */
-@property --g1 {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: #16a34a; /* green-600 */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
 }
-@property --g2 {
-  syntax: "<color>";
-  inherits: false;
-  initial-value: #a7f3d0; /* emerald-200 */
+
+.cursor-blink {
+  animation: blink 1s step-start infinite;
 }
 
 @layer components {
@@ -124,6 +121,5 @@ body {
 @layer utilities {
   .card-wrapper {
     @apply relative bg-linear-to-br from-fuchsia-500/20 via-purple-500/20 to-cyan-500/30;
-
   }
 }

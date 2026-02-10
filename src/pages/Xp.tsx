@@ -19,12 +19,6 @@ export default function ContactPage() {
     offset: ["start end", "end start"]
   });
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (latest > 0.45 && latest < 0.55 && !locked && !hasSnapped) {
-      lockAndSnap();
-    } 
-  });
-
   const lockAndSnap = () => {
     setLocked(true);
     setHasSnapped(true); // Mark that snap has occurred
@@ -49,6 +43,14 @@ export default function ContactPage() {
       document.body.style.overflow = "auto";
     }, 900); // match duration of scroll
   };
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest > 0.45 && latest < 0.55 && !locked && !hasSnapped) {
+      lockAndSnap();
+    } 
+  });
+
+  
 
   return (
     <div className="min-h-screen font-sans flex flex-col">

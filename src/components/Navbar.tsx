@@ -4,29 +4,25 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 
+import { NavLinks } from "../app/constants";
+
 export default function Navbar() {
   const pathname = usePathname();
 
-  const links = [
-    { href: "/", label: "Home" },
-    { href: "/about", label: "About" },
-    { href: "/xp", label: " Professional XP" },
-    { href: "/projects", label: "Projects" },
-   
-  ];
+ 
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 h-12 md:h-16 bg-black/10 backdrop-blur-lg border-b border-white/10">
-      <div className="max-w-7xl mx-auto px-6 h-full">
+    <nav className="fixed top-0 left-0 right-0 z-50 h-16 md:h-16 bg-none backdrop-blur-">
+      <div className="max-w-full mx-auto px-6 h-full">
         <div className="flex items-center justify-between h-full">
           {/* Logo */}
-          <Link href="/" className="text-2xl font-bold text-blue-500 hover:text-blue-400 transition-colors">
-            JC
+          <Link href="/" className="text-2xl font-bold text-white hover:text-blue-400 transition-colors">
+            <span className="text-blue-400">JC&apos;s</span> Portfolio
           </Link>
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center justify-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 p-1 rounded-full">
-            {links.map((link) => (
+            {NavLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -41,7 +37,7 @@ export default function Navbar() {
                   <motion.span
                     layoutId="bubble-tab"
                     transition={{ type: "spring", duration: 0.5 }}
-                    className="absolute inset-0 z-0 bg-gradient-to-r from-violet-600 to-indigo-600 rounded-full flex items-center justify-center"
+                    className="absolute inset-0 z-0 bg-linear-to-r from-violet-600 to-indigo-600 rounded-full flex items-center justify-center"
                   />
                 )}
               </Link>

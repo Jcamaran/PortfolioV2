@@ -69,7 +69,7 @@ export default function ProjectsPage() {
                 tech={project.tech}
                 github={project.github}
                 demo={project.demo}
-                website={(project as any).website}
+                website={project.website}
               
                 index={index}
               />

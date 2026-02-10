@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { FaSpotify } from "react-icons/fa";
+import Image from 'next/image';
 
 interface Artist {
   name: string;
@@ -72,13 +73,7 @@ export default function SpotifyCarousel() {
 
   return (
     <div className="relative w-full h-full  rounded-3xl  p-3 flex flex-col cursor-pointer">
-      {/* Header */}
-      {/* <div className="flex items-center gap-2 mb-4 z-10">
-        <div>
-          <p className="text-white font-bold text-sm">Now Vibing To</p>
-          <p className="text-white/70 text-xs">My Top Artists</p>
-        </div>
-      </div> */}
+     
        <p className="text-white/80 text-xs sm:text-xs p-0 pb-1 flex flex-row items-center gap-1 justify-center">Current Favorite Artists </p> 
 
 
@@ -115,20 +110,21 @@ export default function SpotifyCarousel() {
             {/* Artist Card */}
             <div className="relative h-full  flex items-center justify-center flex-col">
               {/* Album/Artist Image */}
-             
-              <div className="relative aspect-video h-[125px]  w-52  sm:w-52 md:w-36 lg:w-52  overflow-hidden rounded-2xl  shadow-2xl bg-transparent">
-                <img
+              <div className="relative aspect-video h-31.25  w-52  sm:w-52 md:w-36 lg:w-52  overflow-hidden rounded-2xl  shadow-2xl bg-transparent">
+                <Image
                   src={artists[currentIndex].image}
                   alt={artists[currentIndex].name}
                   className="w-full h-full object-cover rounded-2xl  "
                   draggable={false}
+                  width={400}
+                  height={400}
                 />
                 {/* Gradient Overlay */}
                 <div className="absolute inset-0 bg-linear-to-t from-black/90 via-transparent to-transparent" />
                 
                 {/* Artist Info */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-2 lg:p-4 px-6">
-                  <p className="text-white font-bold text-lg truncate ">
+                  <p className="text-white font-bold texs-lg truncate ">
                     {artists[currentIndex].name}
                   </p>
                   <p className="text-white/80 text-xs">{artists[currentIndex].genre}</p>
@@ -158,28 +154,26 @@ export default function SpotifyCarousel() {
           ))}
         </div>
 
-        {/* Arrow Navigation (optional) */}
-        {/* <button
-          onClick={() => paginate(-1)}
-          className="absolute left-2 z-10 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/50 transition-colors cursor-pointer"
-        >
-          ‹
-        </button>
-        <button
-          onClick={() => paginate(1)}
-          className="absolute right-2 z-10 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/50 transition-colors cursor-pointer"
-        >
-          ›
-        </button> */}
       </div>
 
       {/* Play Animation */}
       <motion.div
         animate={{ scale: [1, 1.2, 1] }}
         transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-3 right-3 z-10"
+        className="absolute top-3 right-3 z-50"
       >
-        <FaSpotify className="text-white text-2xl rounded-full w-5 h-5" />
+        <a
+          href="https://open.spotify.com/playlist/65AoMfVqLkeNCGsoyMAY4g?si=ZcmAg6A0SDy7iTCkwMlw8A"
+          target="_blank"
+          rel="noopener noreferrer external"
+          title="Check out my Spotify Playlist: Quinoa"
+          aria-label="Open Spotify playlist"
+          className="pointer-events-auto"
+          onClick={(e) => e.stopPropagation()}
+          onPointerDownCapture={(e) => e.stopPropagation()}
+        >
+          <FaSpotify className="text-white w-6 h-6" />
+        </a>
       </motion.div>
     </div>
   );

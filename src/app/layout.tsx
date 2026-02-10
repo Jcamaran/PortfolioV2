@@ -35,7 +35,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <Navbar />
-        <main className="pt-16 md:pt-0 min-h-[calc(100dvh-4rem)] md:min-h-[calc(100dvh-5rem)]">
+        <main className="pt-0 md:pt-0 min-h-screen">
           {children}
         </main>
       </body>

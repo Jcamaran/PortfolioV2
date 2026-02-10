@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from 'framer-motion';
-import { useRef, useMemo } from 'react';
+import { useMemo } from 'react';
 
 interface TimelineSliderProps {
   sliderPosition: number;
@@ -23,22 +23,7 @@ const timelineMarkers = [
 
 // Vertical positions matching experiences - VERTICAL layout
 const verticalPositions = [0.08, 0.35, 0.60, 0.85];
-export default function TimelineSlider({ sliderPosition, onSliderChange, containerRef, isVertical = false }: TimelineSliderProps) {
-  const handleDrag = (event: any, info: any) => {
-    if (containerRef.current) {
-      if (isVertical) {
-        const containerHeight = containerRef.current.offsetHeight;
-        const offset = info.point.y - containerRef.current.getBoundingClientRect().top;
-        const newPosition = Math.max(0, Math.min(1, offset / containerHeight));
-        onSliderChange(newPosition);
-      } else {
-        const containerWidth = containerRef.current.offsetWidth;
-        const offset = info.point.x - containerRef.current.getBoundingClientRect().left;
-        const newPosition = Math.max(0, Math.min(1, offset / containerWidth));
-        onSliderChange(newPosition);
-      }
-    }
-  };
+export default function TimelineSlider({ sliderPosition, isVertical = false }: TimelineSliderProps) {
 
   // Memoize marker calculations for better performance
   const markerStates = useMemo(() => {

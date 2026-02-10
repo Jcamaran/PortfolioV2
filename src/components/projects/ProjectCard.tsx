@@ -100,7 +100,7 @@ export default function ProjectCard({
               href={website}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-1.5 sm:gap-2 py-1.5 sm:py-2 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white rounded-lg sm:rounded-xl transition-all shadow-lg shadow-purple-500/30 group/btn"
+              className="w-full flex items-center justify-center gap-1.5 sm:gap-2 py-1.5 sm:py-2 bg-linear-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white rounded-lg sm:rounded-xl transition-all shadow-lg shadow-purple-500/30 group/btn"
             >
               <FiExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
               <span className="font-medium text-xs sm:text-sm">Article</span>
@@ -123,7 +123,7 @@ export default function ProjectCard({
                   href={demo}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-1.5 sm:py-2 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white rounded-lg sm:rounded-xl transition-all shadow-lg shadow-purple-500/30 group/btn"
+                  className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-1.5 sm:py-2 bg-linear-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white rounded-lg sm:rounded-xl transition-all shadow-lg shadow-purple-500/30 group/btn"
                 >
                   <FiExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
                   <span className="font-medium text-xs sm:text-sm">Demo</span>

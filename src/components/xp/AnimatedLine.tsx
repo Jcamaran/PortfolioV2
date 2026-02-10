@@ -1,6 +1,6 @@
 "use client";
 
-import { easeIn, motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useRef, useState, useMemo, useEffect } from 'react';
 import { ReactFlow, Background, BackgroundVariant } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
@@ -8,12 +8,76 @@ import Logo3D from './Logo3D';
 import TimelineSlider from './TimelineSlider';
 
 
+interface Experience {
+  title: string;
+  company?: string;
+  date: string;
+  description: string;
+  position: string;
+  verticalPosition: string;
+  modelPath: string;
+  modelScale: number;
+  modelOffset?: { x: number; y: number };
+  baseColor: string;
+  skyColor: string;
+}
+
+const experiences: Experience[] = [
+  {
+    title: "Software Engineer Capstone",
+    date: " August, 2025 - Present",
+    description: "Building a retrieval-augmented generation (RAG) LLM web application that enables Sikorsky engineers to diagnose and resolve discrepancies more efficiently.",
+    position: "20%", // Position along horizontal line
+    verticalPosition: "8%", // Position for vertical layout
+    modelPath: "/models/sikorsky.glb",
+    modelScale: 1,
+    modelOffset: { x: 0, y: -0 }, // Offset to center Sikorsky model
+    baseColor: "#3b82f6", // metallic blue
+    skyColor: "#bcdcff"
+  },
+  {
+    title: "Data Analytics Engineer Intern",
+    company: "ASML",
+    date: "May, 2025 - Aug, 2025",
+    description: "Developed ML-driven predictive analytics and a Python + Streamlit app using Azure Databricks to optimize manufacturing workflows.",
+    position: "40%", // Position along horizontal line
+    verticalPosition: "35%",
+    modelPath: "/models/asml_3d_logo_3-v2.glb",
+    modelScale: 1.6,
+    baseColor: "#3b82f6", // metallic blue
+    skyColor: "#bcdcff"
+  },
+  {
+    title: "Data Analyst Intern",
+    date: "May, 2024 - Aug, 2024",
+    description: "Applied machine learning, statistical analysis, and web scraping to analyze weightlifting performance data, uncovering key indicators, and progression trends",
+    position: "60%", // Position along horizontal line
+    verticalPosition: "60%",
+    modelPath: "/models/shu_4.glb",
+    modelScale: 2,
+    modelOffset: { x: 0, y: -10 },
+    baseColor: "#d32f2f", // metallic red
+    skyColor: "#ffd1d1"
+  },
+  {
+    title: "Software Engineer Intern",
+    date: "May, 2023 - Aug, 2023",
+    description: "Built reusable Python-based ETL pipelines with SQL/MongoDB to automate Excel data ingestion and led a Monday.com implementation",
+    position: "80%", // Position along horizontal line
+    verticalPosition: "85%",
+    modelPath: "/models/sikorsky.glb",
+    modelScale: 1,
+    modelOffset: { x: 0, y: -10 }, 
+    baseColor: "#3b82f6", // metallic blue
+    skyColor: "#bcdcff"
+  }
+];
+
 function AnimatedLine() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [hoveredCardIndex, setHoveredCardIndex] = useState<number | null>(null);
   const [viewportWidth, setViewportWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
   const [sliderPosition, setSliderPosition] = useState(0); // 0 to 1 (percentage of container width)
-  const [activeCardIndex, setActiveCardIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const handleResize = () => setViewportWidth(window.innerWidth);
@@ -25,7 +89,7 @@ function AnimatedLine() {
   const isMobile = viewportWidth < 768;
 
   // Calculate which card the slider is currently under
-  useEffect(() => {
+  const activeCardIndex = useMemo(() => {
     const sliderPercent = sliderPosition * 100;
     let foundIndex: number | null = null;
     const isVerticalLayout = viewportWidth < 768;
@@ -39,7 +103,7 @@ function AnimatedLine() {
       }
     });
     
-    setActiveCardIndex(foundIndex);
+    return foundIndex;
   }, [sliderPosition, viewportWidth]);
 
   // Responsive Logo3D dimensions
@@ -50,81 +114,14 @@ function AnimatedLine() {
   };
   const logoDimensions = getLogoDimensions();
   
-  // Track scroll progress of the container
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
-
-  // Transform scroll progress to line width (0 to 100%)
-  const lineWidth = useTransform(scrollYProgress, [0, 1], ["15%", "100%"]);
-
-  const WordTransition = {
-    duration: 0.5,
-    delay: 0.6,
-    anticipate: [0, 0.71, 0.2, 1.01]
-  } as const;
-
-  // Experience data (your last two experiences first, then first two)
-  const experiences = [
-    {
-      title: "Software Engineer Capstone",
-      date: " August, 2025 - Present",
-      description: "Building a retrieval-augmented generation (RAG) LLM web application that enables Sikorsky engineers to diagnose and resolve discrepancies more efficiently.",
-      position: "20%", // Position along horizontal line
-      verticalPosition: "8%", // Position for vertical layout
-      modelPath: "/models/sikorsky.glb",
-      modelScale: 1,
-      modelOffset: { x: 0, y: -0 }, // Offset to center Sikorsky model
-      baseColor: "#3b82f6", // metallic blue
-      skyColor: "#bcdcff"
-    },
-    {
-      title: "Data Analytics Engineer Intern",
-      company: "ASML",
-      date: "May, 2025 - Aug, 2025",
-      description: "Developed ML-driven predictive analytics and a Python + Streamlit app using Azure Databricks to optimize manufacturing workflows.",
-      position: "40%", // Position along horizontal line
-      verticalPosition: "35%",
-      modelPath: "/models/asml_3d_logo_3-v2.glb",
-      modelScale: 1.6,
-      baseColor: "#3b82f6", // metallic blue
-      skyColor: "#bcdcff"
-    },
-    {
-      title: "Data Analyst Intern",
-      date: "May, 2024 - Aug, 2024",
-      description: "Applied machine learning, statistical analysis, and web scraping to analyze weightlifting performance data, uncovering key indicators, and progression trends",
-      position: "60%", // Position along horizontal line
-      verticalPosition: "60%",
-      modelPath: "/models/shu_4.glb",
-      modelScale: 2,
-      modelOffset: { x: 0, y: -10 },
-      baseColor: "#d32f2f", // metallic red
-      skyColor: "#ffd1d1"
-    },
-    {
-      title: "Software Engineer Intern",
-      date: "May, 2023 - Aug, 2023",
-      description: "Built reusable Python-based ETL pipelines with SQL/MongoDB to automate Excel data ingestion and led a Monday.com implementation",
-      position: "80%", // Position along horizontal line
-      verticalPosition: "85%",
-      modelPath: "/models/sikorsky.glb",
-      modelScale: 1,
-      modelOffset: { x: 0, y: -10 }, 
-      baseColor: "#3b82f6", // metallic blue
-      skyColor: "#bcdcff"
-    }
-  ];
-
   // Stable refs for per-card mouse positions (no re-renders)
   const mouseRefs = useMemo(
-    () => experiences.map(() => ({ current: { x: 0, y: 0 } } as { current: { x: number; y: number } })),
+    () => experiences.map(() => ({ current: { x: 0, y: 0 } })),
     []
   );
 
   return (
-    <div className="relative w-full flex flex-col" onClick ={() => setActiveCardIndex(null)}>
+    <div className="relative w-full flex flex-col">
       {/* Timeline section - Horizontal on desktop, Vertical on mobile */}
       <div className={`relative w-full ${isMobile ? 'flex flex-row' : 'flex flex-col'}`}>
         
@@ -141,12 +138,6 @@ function AnimatedLine() {
         )}
 
         <div ref={containerRef} className={`relative ${isMobile ? 'flex-1  min-h-200' : 'w-full h-64 sm:h-72 md:h-80 lg:h-96'} flex items-center ${isMobile ? 'flex-col justify-start py-0' : 'pb-12 sm:pb-16 md:pb-20'}`}>
-          
-          {/* Clickable overlay to ensure clicks anywhere deactivate cards */}
-          <div 
-            className="flex items-center justify-center absolute inset-0 z-0 w-full h-full" 
-            onClick={() => setActiveCardIndex(null)}
-          />
           
           {/* Horizontal/Vertical Line Container */}
           {!isMobile && (
@@ -177,10 +168,9 @@ function AnimatedLine() {
           <motion.div
             className={`${isMobile ? 'order-2 relative' : 'absolute top-[52%]'} flex flex-row overflow-hidden border border-white/50 sm:border-white/60 rounded-md sm:rounded-lg shadow-md sm:shadow-lg shadow-blue-500/20 bg-linear-to-b from-[#8F87F1] to-90% to-blue-400/20 duration-400 md:hover:border-purple-400/60 md:hover:shadow-sm md:hover:shadow-purple-500/40 backdrop-hue-rotate-0 transition-all group cursor-pointer pointer-events-auto`}
                 onClick={(e) => {
-                  e.stopPropagation(); // this prevents the click from bubbling up to the parent div
+                  e.stopPropagation();
                   const position = parseFloat(isMobile ? exp.verticalPosition : exp.position)/100;
                   setSliderPosition(position);
-                  setActiveCardIndex(index); // Directly set active card to allow re-clicking
                 }}
                 style={{ 
                   boxShadow: '0 0 20px rgba(96, 165, 250, 0.3), 0 0 40px rgba(139, 92, 246, 0.2)',
@@ -287,10 +277,10 @@ function AnimatedLine() {
                         modelScale={exp.modelScale * logoDimensions.scale}
                         isHovered={hoveredCardIndex === index}
                         useHDR={false}
-                        baseColor={(exp as any).baseColor}
-                        skyColor={(exp as any).skyColor}
+                        baseColor={exp.baseColor}
+                        skyColor={exp.skyColor}
                         dpr={viewportWidth < 640 ? [1, 1.5] : [1, 2]}
-                        mouseRef={mouseRefs[index] as any}
+                        mouseRef={mouseRefs[index]}
                         
                       />
                     </motion.div>
